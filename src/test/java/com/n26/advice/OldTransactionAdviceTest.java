@@ -1,10 +1,11 @@
-package com.n26.service;
+package com.n26.advice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.n26.advice.OldTransactionAdvice;
 import com.n26.controller.TransactionController;
 import com.n26.exception.OldTransactionException;
 import com.n26.model.Transaction;
+import com.n26.service.TransactionCache;
 import com.n26.validation.TransactionValidationService;
 import org.junit.Before;
 import org.junit.Test;

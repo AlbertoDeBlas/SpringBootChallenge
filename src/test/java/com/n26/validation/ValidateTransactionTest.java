@@ -1,4 +1,4 @@
-package com.n26.service;
+package com.n26.validation;
 
 import com.n26.exception.OldTransactionException;
 import com.n26.model.Transaction;

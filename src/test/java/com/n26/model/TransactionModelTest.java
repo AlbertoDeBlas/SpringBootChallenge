@@ -1,4 +1,4 @@
-package com.n26.service;
+package com.n26.model;
 
 import com.n26.model.Transaction;
 import org.junit.Before;

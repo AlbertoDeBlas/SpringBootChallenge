@@ -1,9 +1,11 @@
-package com.n26.service;
+package com.n26.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.n26.controller.StatisticsController;
 import com.n26.model.Statistics;
 
+import com.n26.service.StatisticsComputation;
+import com.n26.service.TransactionCache;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.Before;
