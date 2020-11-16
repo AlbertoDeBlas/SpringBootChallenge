@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.n26.controller.StatisticsController;
 
 import com.n26.service.StatisticsComputation;
-import com.n26.repository.TransactionCache;
+import com.n26.service.serviceImpl.TransactionCacheImpl;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -39,7 +39,7 @@ public class StatisticsModelTest {
     StatisticsController statisticsController;
 
     @MockBean
-    private TransactionCache transactionCache;
+    private TransactionCacheImpl transactionCache;
 
     @MockBean
     private StatisticsComputation statisticsComputation;

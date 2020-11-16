@@ -1,4 +1,4 @@
-package com.n26.repository;
+package com.n26.service.serviceImpl;
 
 import com.n26.model.Transaction;
 

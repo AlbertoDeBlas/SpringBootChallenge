@@ -2,7 +2,8 @@ package com.n26.controller;
 
 import com.n26.model.Statistics;
 import com.n26.service.StatisticsComputation;
-import com.n26.repository.TransactionCache;
+import com.n26.service.TransactionCache;
+import com.n26.service.serviceImpl.TransactionCacheImpl;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

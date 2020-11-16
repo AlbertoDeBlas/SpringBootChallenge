@@ -1,6 +1,7 @@
 package com.n26.service;
 
 import com.n26.model.Statistics;
+import com.n26.service.serviceImpl.StatisticsComputationImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,7 +19,7 @@ public class StatisticsComputationTest {
     @Before
     public void setData(){
         amountsNotUpRound = new ArrayList<>(Arrays.asList(BigDecimal.valueOf(15.4333),BigDecimal.valueOf(13.2232),BigDecimal.valueOf(14.4564)));
-        statisticsComputation = new StatisticsComputation();
+        statisticsComputation = new StatisticsComputationImpl();
     }
 
     @Test

@@ -7,6 +7,9 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 
 import com.n26.initialization.CacheConfigurationHandler;
 import com.n26.model.Transaction;
+import com.n26.service.TransactionCache;
+import com.n26.service.serviceImpl.TransactionCacheImpl;
+import com.n26.service.serviceImpl.TransactionCacheHandler;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -37,7 +40,7 @@ public class TransactionCacheTest {
     @Before
     public void setData(){
         transaction = new Transaction(BigDecimal.valueOf(1234,2), Timestamp.from(Instant.now()));
-        transactionCache = mock(TransactionCache.class);
+        transactionCache = mock(TransactionCacheImpl.class);
         caffeine = CacheConfigurationHandler.getTransactionCaffeineConfig();
     }
 
@@ -74,7 +77,7 @@ public class TransactionCacheTest {
         ConcurrentHashMap<Object,Object> cachedTransactions = new ConcurrentHashMap<>();
         cachedTransactions.put("first",transaction);
         cachedTransactions.put("second",transaction);
-        assertEquals(asList(transaction.getAmount(),transaction.getAmount()),TransactionCacheHandler.getAmountsArrayList(cachedTransactions));
+        assertEquals(asList(transaction.getAmount(),transaction.getAmount()), TransactionCacheHandler.getAmountsArrayList(cachedTransactions));
     }
 }
 

@@ -2,7 +2,7 @@ package com.n26.validation;
 
 import com.n26.exception.OldTransactionException;
 import com.n26.model.Transaction;
-import com.n26.validation.TransactionValidationService;
+import com.n26.validation.validationImpl.TransactionValidationServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,7 +17,7 @@ public class ValidateTransactionTest {
 
     @Before
     public void setData(){
-        transactionValidationService = new TransactionValidationService();
+        transactionValidationService = new TransactionValidationServiceImpl();
     }
 
     @Test(expected = OldTransactionException.class)

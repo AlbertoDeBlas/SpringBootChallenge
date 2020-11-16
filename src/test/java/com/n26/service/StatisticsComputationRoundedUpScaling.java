@@ -1,6 +1,7 @@
 package com.n26.service;
 
 import com.n26.model.Statistics;
+import com.n26.service.serviceImpl.StatisticsComputationImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,7 +20,7 @@ public class StatisticsComputationRoundedUpScaling {
     @Before
     public void setData() {
         amounts = new ArrayList<>(Arrays.asList(BigDecimal.valueOf(5.0), BigDecimal.valueOf(4.0), BigDecimal.valueOf(2.0)));
-        statisticsComputation = new StatisticsComputation();
+        statisticsComputation = new StatisticsComputationImpl();
     }
 
     @Test

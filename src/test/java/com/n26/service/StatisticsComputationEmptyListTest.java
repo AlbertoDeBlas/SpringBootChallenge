@@ -1,6 +1,7 @@
 package com.n26.service;
 
 import com.n26.model.Statistics;
+import com.n26.service.serviceImpl.StatisticsComputationImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,7 +19,7 @@ public class StatisticsComputationEmptyListTest {
     @Before
     public void setData(){
         emptyList = new ArrayList<>();
-        statisticsComputation = new StatisticsComputation();
+        statisticsComputation = new StatisticsComputationImpl();
     }
 
     @Test

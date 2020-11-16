@@ -1,27 +1,27 @@
-package com.n26.repository;
+package com.n26.service.serviceImpl;
 
 import com.n26.model.Transaction;
+import com.n26.service.TransactionCache;
+import com.n26.service.serviceImpl.TransactionCacheHandler;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 
 import org.springframework.cache.caffeine.CaffeineCache;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
 
-@Repository
-public class TransactionCache {
+@Service
+public class TransactionCacheImpl implements TransactionCache {
 
     private CacheManager cacheManager;
 
     @Inject
-    public TransactionCache(CacheManager cacheManager){
+    public TransactionCacheImpl(CacheManager cacheManager){
         this.cacheManager = cacheManager;
     }
 

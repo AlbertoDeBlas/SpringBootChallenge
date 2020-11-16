@@ -1,6 +1,7 @@
 package com.n26.service;
 
 import com.n26.model.Statistics;
+import com.n26.service.serviceImpl.StatisticsComputationImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,7 +19,7 @@ public class StatisticsComputationRoundedUpTest {
     @Before
     public void setData(){
         amountsUpRound = new ArrayList<>(Arrays.asList(BigDecimal.valueOf(15.4353),BigDecimal.valueOf(15.4363),BigDecimal.valueOf(15.4373)));
-        statisticsComputation = new StatisticsComputation();
+        statisticsComputation = new StatisticsComputationImpl();
     }
 
     @Test
