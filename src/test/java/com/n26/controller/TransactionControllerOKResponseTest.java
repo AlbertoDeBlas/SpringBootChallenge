@@ -4,13 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.n26.advice.OldTransactionAdvice;
 import com.n26.model.Transaction;
 import com.n26.service.TransactionCache;
-import com.n26.service.serviceImpl.TransactionCacheImpl;
 import com.n26.validation.TransactionValidationService;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -44,11 +45,12 @@ public class TransactionControllerOKResponseTest {
     @MockBean
     private TransactionCache transactionCache;
 
+    @Rule
+    public MockitoRule rule = MockitoJUnit.rule();
+
     @Before
     public void setData(){
-
         JacksonTester.initFields(this, new ObjectMapper());
-        MockitoAnnotations.initMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(transactionController)
                 .setControllerAdvice(new OldTransactionAdvice())
                 .build();

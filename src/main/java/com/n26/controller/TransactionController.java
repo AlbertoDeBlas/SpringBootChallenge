@@ -2,7 +2,6 @@ package com.n26.controller;
 
 import com.n26.model.Transaction;
 import com.n26.service.TransactionCache;
-import com.n26.service.serviceImpl.TransactionCacheImpl;
 import com.n26.validation.TransactionValidationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +12,8 @@ import javax.inject.Inject;
 @RestController
 public class TransactionController {
 
-    TransactionValidationService transactionValidationService;
-    TransactionCache transactionCache;
+    private TransactionValidationService transactionValidationService;
+    private TransactionCache transactionCache;
 
     @Inject
     public TransactionController(TransactionValidationService transactionValidationService,

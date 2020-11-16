@@ -14,9 +14,9 @@ import java.util.ArrayList;
 @RestController
 public class StatisticsController {
 
-    StatisticsComputation statisticsComputation;
+    private StatisticsComputation statisticsComputation;
 
-    TransactionCache transactionCache;
+    private TransactionCache transactionCache;
 
     @Inject
     public StatisticsController(StatisticsComputation statisticsComputation,

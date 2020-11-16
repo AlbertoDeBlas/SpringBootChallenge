@@ -11,6 +11,7 @@ import org.springframework.cache.caffeine.CaffeineCache;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentMap;
 
@@ -30,7 +31,7 @@ public class TransactionCacheImpl implements TransactionCache {
         return transaction;
     }
 
-    public ArrayList getCacheValues(){
+    public ArrayList<BigDecimal> getCacheValues(){
         CaffeineCache caffeineCache = (CaffeineCache)cacheManager.getCache("TransactionCache");
         ConcurrentMap<Object, Object> cache = caffeineCache.getNativeCache().asMap();
         return TransactionCacheHandler.getAmountsArrayList(cache);

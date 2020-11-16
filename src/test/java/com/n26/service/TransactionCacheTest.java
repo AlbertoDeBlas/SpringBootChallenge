@@ -91,7 +91,6 @@ class FakeTicker implements Ticker {
 
     @Override
     public long read() {
-        long value = nanos.getAndAdd(0);
-        return value;
+        return nanos.getAndAdd(0);
     }
 }

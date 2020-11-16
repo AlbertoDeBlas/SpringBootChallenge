@@ -8,11 +8,13 @@ import com.n26.service.serviceImpl.TransactionCacheImpl;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -25,7 +27,6 @@ import java.math.BigDecimal;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @RunWith(SpringRunner.class)
@@ -44,6 +45,9 @@ public class StatisticsModelTest {
     @MockBean
     private StatisticsComputation statisticsComputation;
 
+    @Rule
+    public MockitoRule rule = MockitoJUnit.rule();
+
     @Before
     public void setData(){
         JacksonTester.initFields(this, new ObjectMapper());
@@ -51,8 +55,7 @@ public class StatisticsModelTest {
                 BigDecimal.valueOf(15.43),
                 BigDecimal.valueOf(15.43),
                 BigDecimal.valueOf(15.43),
-                Long.valueOf(1));
-        MockitoAnnotations.initMocks(this);
+                1L);
         mockMvc = MockMvcBuilders.standaloneSetup(statisticsController).build();
     }
 

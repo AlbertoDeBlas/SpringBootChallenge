@@ -19,6 +19,7 @@ public class StatisticsComputationImpl implements StatisticsComputation {
         BigDecimal max = computeMax(amounts).setScale(2, RoundingMode.HALF_UP);
         BigDecimal min = computeMin(amounts).setScale(2, RoundingMode.HALF_UP);
         long count = count(amounts);
+
         return new Statistics(sum, avg, max, min, count);
     }
 
@@ -35,19 +36,19 @@ public class StatisticsComputationImpl implements StatisticsComputation {
     }
 
     private BigDecimal computeAverage(ArrayList<BigDecimal> amounts){
-        Double average = amounts.stream().mapToDouble(BigDecimal::doubleValue).average().orElse(0.0);
+        double average = amounts.stream().mapToDouble(BigDecimal::doubleValue).average().orElse(0.0);
 
         return BigDecimal.valueOf(average);
     }
 
     private BigDecimal computeMax(ArrayList<BigDecimal> amounts){
-        Optional<BigDecimal> max = amounts.stream().map(a->a).max(Comparator.naturalOrder());
+        Optional<BigDecimal> max = amounts.stream().max(Comparator.naturalOrder());
 
         return max.orElse(BigDecimal.valueOf(0));
     }
 
     private BigDecimal computeMin(ArrayList<BigDecimal> amounts){
-        Optional<BigDecimal> min = amounts.stream().map(a->a).min(Comparator.naturalOrder());
+        Optional<BigDecimal> min = amounts.stream().min(Comparator.naturalOrder());
 
         return min.orElse(BigDecimal.valueOf(0));
     }

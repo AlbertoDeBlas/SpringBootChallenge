@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 public class CacheConfigurationHandler {
 
     public static Caffeine<Object, Transaction> getTransactionCaffeineConfig() {
-        return Caffeine.newBuilder().expireAfter(new Expiry<Object, Transaction>() {
+        return Caffeine.newBuilder().expireAfter(new Expiry<>() {
 
             @Override
             public long expireAfterCreate(@NonNull Object o, @NonNull Transaction transaction, long l) {
@@ -32,8 +32,7 @@ public class CacheConfigurationHandler {
                 long differenceBetweenCurrentAndTransaction =
                         TimeUnit.MILLISECONDS.toNanos(System.currentTimeMillis()) -
                                 TimeUnit.MILLISECONDS.toNanos(transaction.getTimestamp().getTime());
-                long expiration = TimeUnit.SECONDS.toNanos(60) - differenceBetweenCurrentAndTransaction;
-                return expiration;
+                return TimeUnit.SECONDS.toNanos(60) - differenceBetweenCurrentAndTransaction;
             }
         });
     }

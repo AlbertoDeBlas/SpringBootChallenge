@@ -2,6 +2,7 @@ package com.n26.initialization;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 
+import com.n26.model.Transaction;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
@@ -13,8 +14,7 @@ import org.springframework.context.annotation.Configuration;
 public class CacheBuilder {
 
     @Bean
-    public Caffeine caffeineConfig() {
-
+    public Caffeine<Object, Transaction> caffeineConfig() {
         return CacheConfigurationHandler.getTransactionCaffeineConfig();
     }
 
