@@ -13,7 +13,7 @@ public class TransactionValidationService {
         long difference = TimeUnit.MILLISECONDS.toNanos(System.currentTimeMillis()) -
                 TimeUnit.MILLISECONDS.toNanos(transaction.getTimestamp().getTime());
         long differenceInSeconds = TimeUnit.NANOSECONDS.toSeconds(difference);
-        if(differenceInSeconds > 60){
+        if(differenceInSeconds >= 60){
             throw new OldTransactionException();
         }
     }
