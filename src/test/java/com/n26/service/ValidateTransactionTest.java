@@ -24,21 +24,21 @@ public class ValidateTransactionTest {
     public void notValidTransaction(){
         Instant instant = Instant.now().plusMillis(-61000);
         transaction = new Transaction(BigDecimal.valueOf(1234,2), Timestamp.from(instant));
-        transactionValidationService.validateTransaction(transaction);
+        transactionValidationService.validateTransactionAge(transaction);
     }
 
     @Test
     public void validTransaction(){
         Instant instant = Instant.now().plusMillis(-1000);
         transaction = new Transaction(BigDecimal.valueOf(1234,2), Timestamp.from(instant));
-        transactionValidationService.validateTransaction(transaction);
+        transactionValidationService.validateTransactionAge(transaction);
     }
 
     @Test(expected = OldTransactionException.class)
     public void notValidTransactionEdge(){
         Instant instant = Instant.now().plusMillis(-60000);
         transaction = new Transaction(BigDecimal.valueOf(1234,2), Timestamp.from(instant));
-        transactionValidationService.validateTransaction(transaction);
+        transactionValidationService.validateTransactionAge(transaction);
     }
 
 }

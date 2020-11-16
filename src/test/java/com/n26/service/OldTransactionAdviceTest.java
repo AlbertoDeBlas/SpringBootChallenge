@@ -63,7 +63,7 @@ public class OldTransactionAdviceTest {
     public void checkOldTransactionExceptionIsCaughtAndStatusCodeNoContentIsReturned() throws Exception{
         doThrow(new OldTransactionException())
                 .when(transactionValidationService)
-                .validateTransaction(any());
+                .validateTransactionAge(any());
 
         mockMvc.perform(post("/transactions")
                     .contentType(MediaType.APPLICATION_JSON)

@@ -25,7 +25,7 @@ public class TransactionController {
     @PostMapping("/transactions")
     @ResponseStatus( HttpStatus.CREATED )
     public void newTransaction(@Valid @RequestBody Transaction newTransaction){
-        transactionValidationService.validateTransaction(newTransaction);
+        transactionValidationService.validateTransactionAge(newTransaction);
         transactionCache.cachingTransaction(newTransaction);
     }
 
