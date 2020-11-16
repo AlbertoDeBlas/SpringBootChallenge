@@ -4,10 +4,7 @@ import com.n26.model.Transaction;
 import com.n26.service.TransactionCache;
 import com.n26.validation.TransactionValidationService;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.inject.Inject;
@@ -31,4 +28,11 @@ public class TransactionController {
         transactionValidationService.validateTransaction(newTransaction);
         transactionCache.cachingTransaction(newTransaction);
     }
+
+    @DeleteMapping("/transactions")
+    @ResponseStatus( HttpStatus.NO_CONTENT )
+    void deleteTransactions(){
+        transactionCache.evictAllCacheValues();
+    }
+
 }

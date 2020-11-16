@@ -2,6 +2,7 @@ package com.n26.service;
 
 import com.n26.model.Transaction;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 
 import org.springframework.cache.caffeine.CaffeineCache;
@@ -38,4 +39,7 @@ public class TransactionCache {
         }
         return amounts;
     }
+
+    @CacheEvict(value = "TransactionCache", allEntries = true)
+    public void evictAllCacheValues() {}
 }
