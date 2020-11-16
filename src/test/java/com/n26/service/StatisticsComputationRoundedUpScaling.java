@@ -23,13 +23,13 @@ public class StatisticsComputationRoundedUpScaling {
     }
 
     @Test
-    public void computeSumRoundUpTest(){
+    public void computeSumRoundUp(){
         Statistics statistics = statisticsComputation.computeStatistics(amounts);
         assertEquals(BigDecimal.valueOf(1100,2),statistics.getSum());
     }
 
     @Test
-    public void computeAverageRoundUpTest(){
+    public void computeAverageRoundUp(){
         Statistics statistics = statisticsComputation.computeStatistics(amounts);
         assertEquals(BigDecimal.valueOf(367,2),statistics.getAvg());
     }

@@ -1,7 +1,7 @@
 package com.n26.controller;
 
 import com.n26.model.Transaction;
-import com.n26.service.TransactionCache;
+import com.n26.repository.TransactionCache;
 import com.n26.validation.TransactionValidationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

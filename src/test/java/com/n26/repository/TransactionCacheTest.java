@@ -1,34 +1,28 @@
-package com.n26.service;
+package com.n26.repository;
 
 import com.github.benmanes.caffeine.cache.Ticker;
-//import com.google.common.testing.FakeTicker;
-
-
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
-import com.n26.initialization.CacheBuilder;
+
 import com.n26.initialization.CacheConfigurationHandler;
 import com.n26.model.Transaction;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
-import org.springframework.cache.CacheManager;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
-
-import javax.inject.Inject;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.concurrent.ConcurrentHashMap;
+
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
+import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 public class TransactionCacheTest {
@@ -36,11 +30,9 @@ public class TransactionCacheTest {
     @InjectMocks
     private TransactionCache transactionCache;
 
-
-    @Inject
-    private CacheBuilder cacheBuilder;
     private Transaction transaction;
     private Caffeine caffeine;
+
 
     @Before
     public void setData(){
@@ -50,7 +42,7 @@ public class TransactionCacheTest {
     }
 
     @Test
-    public void testTransactionCaching(){
+    public void transactionCaching(){
         Transaction firstTransaction = transactionCache.cachingTransaction(transaction);
         Transaction secondTransaction = transactionCache.cachingTransaction(transaction);
 
@@ -58,7 +50,7 @@ public class TransactionCacheTest {
     }
 
     @Test
-    public void testCacheExpiration(){
+    public void cacheExpiration(){
         FakeTicker fakeTicker = new FakeTicker();
         LoadingCache<String, Transaction> cache = caffeine.ticker(fakeTicker).build(k -> transaction);
         cache.get("test");
@@ -68,14 +60,21 @@ public class TransactionCacheTest {
     }
 
     @Test
-    public void testCacheNotExpirated(){
+    public void cacheNotExpired(){
         FakeTicker fakeTicker = new FakeTicker();
         LoadingCache<String, Transaction> cache = caffeine.ticker(fakeTicker).build(k -> transaction);
         cache.get("test");
         fakeTicker.advance(59, TimeUnit.SECONDS);
 
         assertNotNull(cache.getIfPresent("test"));
+    }
 
+    @Test
+    public void getAmountsArrayList(){
+        ConcurrentHashMap<Object,Object> cachedTransactions = new ConcurrentHashMap<>();
+        cachedTransactions.put("first",transaction);
+        cachedTransactions.put("second",transaction);
+        assertEquals(asList(transaction.getAmount(),transaction.getAmount()),TransactionCacheHandler.getAmountsArrayList(cachedTransactions));
     }
 }
 

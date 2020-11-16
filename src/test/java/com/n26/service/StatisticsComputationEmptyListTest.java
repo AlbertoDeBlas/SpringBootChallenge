@@ -22,25 +22,25 @@ public class StatisticsComputationEmptyListTest {
     }
 
     @Test
-    public void computeSumRoundUpTest(){
+    public void computeSumRoundUp(){
         Statistics statistics = statisticsComputation.computeStatistics(emptyList);
         assertEquals(BigDecimal.valueOf(000,2),statistics.getSum());
     }
 
     @Test
-    public void computeAverageRoundUpTest(){
+    public void computeAverageRoundUp(){
         Statistics statistics = statisticsComputation.computeStatistics(emptyList);
         assertEquals(BigDecimal.valueOf(000,2),statistics.getAvg());
     }
 
     @Test
-    public void computeMaxRoundUpTest(){
+    public void computeMaxRoundUp(){
         Statistics statistics = statisticsComputation.computeStatistics(emptyList);
         assertEquals(BigDecimal.valueOf(000,2),statistics.getMax());
     }
 
     @Test
-    public void computeMinRoundUpTest(){
+    public void computeMinRoundUp(){
         Statistics statistics = statisticsComputation.computeStatistics(emptyList);
         assertEquals(BigDecimal.valueOf(000,2),statistics.getMin());
     }

@@ -22,31 +22,31 @@ public class StatisticsComputationTest {
     }
 
     @Test
-    public void computeSumTest(){
+    public void computeSum(){
         Statistics statistics = statisticsComputation.computeStatistics(amountsNotUpRound);
         assertEquals(BigDecimal.valueOf(43.11),statistics.getSum());
     }
 
     @Test
-    public void computeAverageTest(){
+    public void computeAverage(){
         Statistics statistics = statisticsComputation.computeStatistics(amountsNotUpRound);
         assertEquals(BigDecimal.valueOf(14.37),statistics.getAvg());
     }
 
     @Test
-    public void computeMaxTest(){
+    public void computeMax(){
         Statistics statistics = statisticsComputation.computeStatistics(amountsNotUpRound);
         assertEquals(BigDecimal.valueOf(15.43),statistics.getMax());
     }
 
     @Test
-    public void computeMinTest(){
+    public void computeMin(){
         Statistics statistics = statisticsComputation.computeStatistics(amountsNotUpRound);
         assertEquals(BigDecimal.valueOf(13.22),statistics.getMin());
     }
 
     @Test
-    public void countTest(){
+    public void count(){
         Statistics statistics = statisticsComputation.computeStatistics(amountsNotUpRound);
         assertEquals(3,statistics.getCount());
     }
