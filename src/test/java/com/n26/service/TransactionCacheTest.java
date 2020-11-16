@@ -1,4 +1,4 @@
-package com.n26.repository;
+package com.n26.service;
 
 import com.github.benmanes.caffeine.cache.Ticker;
 
@@ -7,7 +7,6 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 
 import com.n26.initialization.CacheConfigurationHandler;
 import com.n26.model.Transaction;
-import com.n26.service.TransactionCache;
 import com.n26.service.serviceImpl.TransactionCacheImpl;
 import com.n26.service.serviceImpl.TransactionCacheHandler;
 import org.junit.Before;
