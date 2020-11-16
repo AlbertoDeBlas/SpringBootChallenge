@@ -14,12 +14,16 @@ import javax.inject.Inject;
 @RestController
 public class TransactionController {
 
-    @Inject
     TransactionValidationService transactionValidationService;
+
+    @Inject
+    public TransactionController(TransactionValidationService transactionValidationService) {
+        this.transactionValidationService = transactionValidationService;
+    }
 
     @PostMapping("/transactions")
     @ResponseStatus( HttpStatus.CREATED )
-    void newTransaction(@Valid @RequestBody Transaction newTransaction){
+    public void newTransaction(@Valid @RequestBody Transaction newTransaction){
         transactionValidationService.validateTransaction(newTransaction);
     }
 

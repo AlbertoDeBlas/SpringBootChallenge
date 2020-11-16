@@ -18,6 +18,10 @@ public class Transaction {
     @PastOrPresent
     private Timestamp timestamp;
 
+    // Empty constructor is needed for Jackson to recreate the object from JSON
+    public Transaction() {
+    }
+
     public Transaction(BigDecimal amount, Timestamp timestamp) {
         this.amount = amount;
         this.timestamp = timestamp;
