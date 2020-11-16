@@ -44,6 +44,9 @@ public class OldTransactionAdviceTest {
     @MockBean
     private TransactionValidationService transactionValidationService;
 
+    @MockBean
+    private TransactionCache transactionCache;
+
     @Before
     public void setData(){
 
