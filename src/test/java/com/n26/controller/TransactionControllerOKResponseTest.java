@@ -10,6 +10,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.springframework.boot.test.json.JacksonTester;
@@ -28,7 +29,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
 public class TransactionControllerOKResponseTest {
 
     private MockMvc mockMvc;
@@ -39,10 +39,10 @@ public class TransactionControllerOKResponseTest {
 
     private Transaction transaction;
 
-    @MockBean
+    @Mock
     private TransactionValidationService transactionValidationService;
 
-    @MockBean
+    @Mock
     private TransactionCache transactionCache;
 
     @Rule
