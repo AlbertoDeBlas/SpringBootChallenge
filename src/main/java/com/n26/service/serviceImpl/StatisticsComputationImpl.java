@@ -6,14 +6,14 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.DoubleSummaryStatistics;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class StatisticsComputationImpl implements StatisticsComputation {
 
-    public Statistics computeStatistics(ArrayList<BigDecimal> amounts){
+    public Statistics computeStatistics(List<BigDecimal> amounts){
         DoubleSummaryStatistics summaryStatistics =
                 amounts.stream()
                        .collect(Collectors.summarizingDouble(BigDecimal::doubleValue));

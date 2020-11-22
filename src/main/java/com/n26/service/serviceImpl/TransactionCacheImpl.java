@@ -2,7 +2,6 @@ package com.n26.service.serviceImpl;
 
 import com.n26.model.Transaction;
 import com.n26.service.TransactionCache;
-import com.n26.service.serviceImpl.TransactionCacheHandler;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentMap;
 
 
@@ -31,10 +30,10 @@ public class TransactionCacheImpl implements TransactionCache {
         return transaction;
     }
 
-    public ArrayList<BigDecimal> getCacheValues(){
+    public List<BigDecimal> getCacheValues(){
         CaffeineCache caffeineCache = (CaffeineCache)cacheManager.getCache("TransactionCache");
         ConcurrentMap<Object, Object> cache = caffeineCache.getNativeCache().asMap();
-        return TransactionCacheHandler.getAmountsArrayList(cache);
+        return TransactionCacheHandler.getAmountsList(cache);
     }
 
 

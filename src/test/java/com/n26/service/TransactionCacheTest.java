@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -73,11 +74,11 @@ public class TransactionCacheTest {
         caffeineCache.put("first",transaction);
         Mockito.when(cacheManager.getCache(Mockito.anyString()))
                 .thenReturn(caffeineCache);
-        ArrayList<BigDecimal> cachedValues = transactionCache.getCacheValues();
+        List<BigDecimal> cachedValues = transactionCache.getCacheValues();
         ArrayList<BigDecimal> expectedValues = new ArrayList<>();
         expectedValues.add(BigDecimal.valueOf(1234,2));
 
-        assertThat(expectedValues, equalTo(cachedValues));
+        assertThat(expectedValues, equalTo(new ArrayList<>(cachedValues)));
     }
 
     @Test
@@ -86,19 +87,19 @@ public class TransactionCacheTest {
         caffeineCache.put("second",anotherTransaction);
         Mockito.when(cacheManager.getCache(Mockito.anyString()))
                 .thenReturn(caffeineCache);
-        ArrayList<BigDecimal> cachedValues = transactionCache.getCacheValues();
+        List<BigDecimal> cachedValues = transactionCache.getCacheValues();
         ArrayList<BigDecimal> expectedValues = new ArrayList<>();
         expectedValues.add(BigDecimal.valueOf(1334,2));
         expectedValues.add(BigDecimal.valueOf(1234,2));
 
-        assertThat(expectedValues, equalTo(cachedValues));
+        assertThat(expectedValues, equalTo(new ArrayList<>(cachedValues)));
     }
 
     @Test
     public void getEmptyCacheValues(){
         Mockito.when(cacheManager.getCache(Mockito.anyString()))
                 .thenReturn(caffeineCache);
-        ArrayList<BigDecimal> cachedValues = transactionCache.getCacheValues();
+        List<BigDecimal> cachedValues = transactionCache.getCacheValues();
 
         assertThat(cachedValues,is(empty()));
     }

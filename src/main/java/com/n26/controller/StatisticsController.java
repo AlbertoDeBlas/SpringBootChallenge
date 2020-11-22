@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class StatisticsController {
@@ -27,7 +27,7 @@ public class StatisticsController {
 
     @GetMapping("/statistics")
     Statistics getStatistics(){
-        ArrayList<BigDecimal> amounts = transactionCache.getCacheValues();
+        List<BigDecimal> amounts = transactionCache.getCacheValues();
         return statisticsComputation.computeStatistics(amounts);
     }
 }

@@ -3,18 +3,19 @@ package com.n26.service.serviceImpl;
 import com.n26.model.Transaction;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Collectors;
 
 public class TransactionCacheHandler {
 
-    public static ArrayList<BigDecimal> getAmountsArrayList(ConcurrentMap<Object, Object> cache) {
-        ArrayList<BigDecimal> amounts = new ArrayList<>();
-        for(Map.Entry<Object,Object> entry: cache.entrySet()){
-            Transaction t = (Transaction)entry.getValue();
-            amounts.add(t.getAmount());
-        }
+    public static List<BigDecimal> getAmountsList(ConcurrentMap<Object, Object> cache) {
+        List<BigDecimal> amounts = cache.values()
+                                        .stream()
+                                        .map(Transaction.class::cast)
+                                        .map(Transaction::getAmount)
+                                        .collect(Collectors.toList());
+
         return amounts;
     }
 }
