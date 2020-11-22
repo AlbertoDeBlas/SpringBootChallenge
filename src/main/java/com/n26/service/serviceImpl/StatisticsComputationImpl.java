@@ -7,53 +7,36 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Optional;
+import java.util.DoubleSummaryStatistics;
+import java.util.stream.Collectors;
 
 @Service
 public class StatisticsComputationImpl implements StatisticsComputation {
 
     public Statistics computeStatistics(ArrayList<BigDecimal> amounts){
-        BigDecimal sum = computeSum(amounts).setScale(2, RoundingMode.HALF_UP);
-        BigDecimal avg = computeAverage(amounts).setScale(2, RoundingMode.HALF_UP);
-        BigDecimal max = computeMax(amounts).setScale(2, RoundingMode.HALF_UP);
-        BigDecimal min = computeMin(amounts).setScale(2, RoundingMode.HALF_UP);
-        long count = count(amounts);
+        DoubleSummaryStatistics summaryStatistics =
+                amounts.stream()
+                       .collect(Collectors.summarizingDouble(BigDecimal::doubleValue));
+
+        return mapStatistics(summaryStatistics);
+    }
+
+    private Statistics mapStatistics(DoubleSummaryStatistics summaryStatistics) {
+        BigDecimal sum = toScaledRoundedBigDecimal(summaryStatistics.getSum());
+        BigDecimal avg = toScaledRoundedBigDecimal(summaryStatistics.getAverage());
+        BigDecimal max = getFiniteValue(summaryStatistics.getMax());
+        BigDecimal min = getFiniteValue(summaryStatistics.getMin());
+        long count = summaryStatistics.getCount();
 
         return new Statistics(sum, avg, max, min, count);
     }
 
-    private Statistics getZeroStatistics() {
-        return new Statistics(BigDecimal.valueOf(0, 0),
-                BigDecimal.valueOf(0, 0),
-                BigDecimal.valueOf(0, 0),
-                BigDecimal.valueOf(0, 0),
-                0);
+    private BigDecimal getFiniteValue(double value) {
+        return Double.isFinite(value) ? toScaledRoundedBigDecimal(value) : BigDecimal.ZERO.setScale(2);
     }
 
-    private BigDecimal computeSum(ArrayList<BigDecimal> amounts){
-        return amounts.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
+    private BigDecimal toScaledRoundedBigDecimal(Double value){
+        return BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP);
     }
 
-    private BigDecimal computeAverage(ArrayList<BigDecimal> amounts){
-        double average = amounts.stream().mapToDouble(BigDecimal::doubleValue).average().orElse(0.0);
-
-        return BigDecimal.valueOf(average);
-    }
-
-    private BigDecimal computeMax(ArrayList<BigDecimal> amounts){
-        Optional<BigDecimal> max = amounts.stream().max(Comparator.naturalOrder());
-
-        return max.orElse(BigDecimal.valueOf(0));
-    }
-
-    private BigDecimal computeMin(ArrayList<BigDecimal> amounts){
-        Optional<BigDecimal> min = amounts.stream().min(Comparator.naturalOrder());
-
-        return min.orElse(BigDecimal.valueOf(0));
-    }
-
-    private long count(ArrayList<BigDecimal> amounts){
-        return amounts.size();
-    }
 }
