@@ -2,9 +2,8 @@ package com.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.model.Transaction;
-import com.advice.OldTransactionAdvice;
+import com.advice.TransactionValidationAdvice;
 import com.service.TransactionCache;
-import com.validation.TransactionValidationService;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -37,9 +36,6 @@ public class TransactionControllerOKResponseTest {
     private Transaction transaction;
 
     @Mock
-    private TransactionValidationService transactionValidationService;
-
-    @Mock
     private TransactionCache transactionCache;
 
     @Rule
@@ -49,9 +45,9 @@ public class TransactionControllerOKResponseTest {
     public void setData(){
         JacksonTester.initFields(this, new ObjectMapper());
         mockMvc = MockMvcBuilders.standaloneSetup(transactionController)
-                .setControllerAdvice(new OldTransactionAdvice())
+                .setControllerAdvice(new TransactionValidationAdvice())
                 .build();
-        transaction = new Transaction(BigDecimal.valueOf(1234,2), Timestamp.from(Instant.now().plusMillis(-61000)));
+        transaction = new Transaction(BigDecimal.valueOf(1234,2), Timestamp.from(Instant.now().plusMillis(-21000)));
     }
 
     @Test

@@ -1,6 +1,7 @@
 package com.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.model.annotation.XSecondsPastOrPresent;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,5 +22,6 @@ public class Transaction {
 
     @NotNull
     @PastOrPresent
+    @XSecondsPastOrPresent(seconds=60)
     private Timestamp timestamp;
 }
