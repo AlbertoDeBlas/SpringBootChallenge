@@ -1,69 +1,62 @@
-package com.model;
+package com.model
 
-import com.exception.OldTransactionException;
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import com.model.Transaction
+import org.assertj.core.api.Assertions
 
-import javax.validation.*;
+import org.junit.Test
+import org.junit.jupiter.api.TestInstance
+import java.time.Instant
+import java.math.BigDecimal
+import java.sql.Timestamp
+import javax.validation.Validation
+import javax.validation.Validator
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.util.Set;
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class TransactionModelTest {
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+    private val  validator: Validator
 
-public class TransactionModelTest {
+   init {
+       val factory = Validation.buildDefaultValidatorFactory()
+       validator = factory.validator
+   }
 
-    private Transaction transaction;
-    private Validator validator;
-
-    @Before
-    public void setData(){
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        validator = factory.getValidator();
+    @Test
+    fun `Transaction with future timestamp should add a violation`() {
+        val instant = Instant.now().plusMillis(+10000)
+        val transaction = Transaction(BigDecimal.valueOf(1234, 2), Timestamp.from(instant))
+        val violations = validator.validate(transaction)
+        Assertions.assertThat(violations::isNotEmpty)
     }
 
     @Test
-    public void transactionWithFutureTimestamp(){
-        Instant instant = Instant.now().plusMillis(+10000);
-        transaction = new Transaction(BigDecimal.valueOf(1234,2), Timestamp.from(instant));
-        Set<ConstraintViolation<Transaction>> violations = validator.validate(transaction);
-        assertFalse(violations.isEmpty());
+    fun `Transaction with a timestamp within last 60 seconds should not add violations`() {
+        val instant = Instant.now().plusMillis(-10000)
+        val transaction = Transaction(BigDecimal.valueOf(1234, 2), Timestamp.from(instant))
+        val violations = validator.validate(transaction)
+        Assertions.assertThat(violations::isEmpty)
     }
 
     @Test
-    public void transactionWithTimestampWithin60Seconds(){
-        Instant instant = Instant.now().plusMillis(-10000);
-        transaction = new Transaction(BigDecimal.valueOf(1234,2), Timestamp.from(instant));
-        Set<ConstraintViolation<Transaction>> violations = validator.validate(transaction);
-        assertTrue(violations.isEmpty());
-    }
-
-    @Test//(expected = MethodArgumentNotValidException.class)
-    public void transactionWithTimestampOlderThan60Seconds(){
-        Instant instant = Instant.now().plusMillis(-70000);
-        transaction = new Transaction(BigDecimal.valueOf(1234,2), Timestamp.from(instant));
-        Set<ConstraintViolation<Transaction>> violations = validator.validate(transaction);
-        assertFalse(violations.isEmpty());
+    fun `Transaction with a timestamp older than 60 seconds should add a violation`() {
+        val instant = Instant.now().plusMillis(-70000)
+        val transaction = Transaction(BigDecimal.valueOf(1234, 2), Timestamp.from(instant))
+        val violations = validator.validate(transaction)
+        Assertions.assertThat(violations::isNotEmpty)
     }
 
     @Test
-    public void transactionWithNullAmount(){
-        Instant instant = Instant.now();
-        transaction = new Transaction(null, Timestamp.from(instant));
-        Set<ConstraintViolation<Transaction>> violations = validator.validate(transaction);
-        assertFalse(violations.isEmpty());
+    fun `Transaction with null amount should add add a violation`() {
+        val instant = Instant.now()
+        val transaction = Transaction(null, Timestamp.from(instant))
+        val violations = validator.validate(transaction)
+        Assertions.assertThat(violations::isNotEmpty)
     }
 
     @Test
-    public void transactionWithNullTimestamp(){
-        Instant instant = Instant.now();
-        transaction = new Transaction(BigDecimal.valueOf(1234,2), null);
-        Set<ConstraintViolation<Transaction>> violations = validator.validate(transaction);
-        assertFalse(violations.isEmpty());
+    fun `Transaction with null timestamp should add add a violation`() {
+        val transaction = Transaction(BigDecimal.valueOf(1234, 2), null)
+        val violations = validator.validate(transaction)
+        Assertions.assertThat(violations::isNotEmpty)
     }
-
 }

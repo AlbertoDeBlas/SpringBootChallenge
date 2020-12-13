@@ -1,9 +1,8 @@
-package com.service;
+package com.service
 
-import com.model.Statistics;
-import java.math.BigDecimal;
-import java.util.List;
+import com.model.Statistics
+import java.math.BigDecimal
 
-public interface StatisticsComputation {
-    Statistics computeStatistics(List<BigDecimal> amounts);
+interface StatisticsComputation {
+    fun computeStatistics(amounts: List<BigDecimal>): Statistics
 }
