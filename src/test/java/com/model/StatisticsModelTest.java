@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import com.model.Statistics;
 import java.math.BigDecimal;
 
 import static org.mockito.ArgumentMatchers.any;
