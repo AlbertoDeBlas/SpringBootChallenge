@@ -1,13 +1,12 @@
-package com;
+package com
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import kotlin.jvm.JvmStatic
+import org.springframework.boot.SpringApplication
 
 @SpringBootApplication
-public class Application {
+open class Application
 
-    public static void main(String... args) {
-        SpringApplication.run(Application.class, args);
-    }
-
+fun main(args: Array<String>) {
+    SpringApplication.run(Application::class.java, *args)
 }
