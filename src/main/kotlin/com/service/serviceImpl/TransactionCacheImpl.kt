@@ -1,43 +1,31 @@
-package com.service.serviceImpl;
+package com.service.serviceImpl
 
-import com.model.Transaction;
-import com.service.TransactionCache;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-
-import org.springframework.cache.caffeine.CaffeineCache;
-import org.springframework.stereotype.Service;
-
-import javax.inject.Inject;
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.concurrent.ConcurrentMap;
-
+import com.service.serviceImpl.TransactionCacheHandler.getAmountsList
+import javax.inject.Inject
+import org.springframework.cache.CacheManager
+import com.service.TransactionCache
+import org.springframework.cache.annotation.Cacheable
+import com.model.Transaction
+import java.math.BigDecimal
+import org.springframework.cache.caffeine.CaffeineCache
+import java.util.concurrent.ConcurrentMap
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.stereotype.Service
 
 @Service
-public class TransactionCacheImpl implements TransactionCache {
-
-    private CacheManager cacheManager;
-
-    @Inject
-    public TransactionCacheImpl(CacheManager cacheManager){
-        this.cacheManager = cacheManager;
-    }
-
+open class TransactionCacheImpl @Inject constructor(private val cacheManager: CacheManager) : TransactionCache {
     @Cacheable("TransactionCache")
-    public Transaction cachingTransaction(Transaction transaction){
-        return transaction;
+    override fun cachingTransaction(transaction: Transaction): Transaction {
+        return transaction
     }
 
-    public List<BigDecimal> getCacheValues(){
-        CaffeineCache caffeineCache = (CaffeineCache)cacheManager.getCache("TransactionCache");
-        ConcurrentMap<Object, Object> cache = caffeineCache.getNativeCache().asMap();
-        return TransactionCacheHandler.getAmountsList(cache);
+    override fun getCacheValues(): List<BigDecimal> {
+        val caffeineCache = cacheManager.getCache("TransactionCache") as CaffeineCache
+        val cache: ConcurrentMap<Any, Any> = caffeineCache.nativeCache.asMap()
+        return getAmountsList(cache)
     }
 
-
-
-    @CacheEvict(value = "TransactionCache", allEntries = true)
-    public void evictAllCacheValues() {}
+    @CacheEvict(value = ["TransactionCache"], allEntries = true)
+    override fun evictAllCacheValues() {
+    }
 }

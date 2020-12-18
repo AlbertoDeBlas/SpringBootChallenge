@@ -16,7 +16,7 @@ class StatisticsController @Inject constructor(
     @get:GetMapping("/statistics")
     val statistics: Statistics
         get() {
-            val amounts = transactionCache.cacheValues
+            val amounts = transactionCache.getCacheValues()
             return statisticsComputation.computeStatistics(amounts)
         }
 }

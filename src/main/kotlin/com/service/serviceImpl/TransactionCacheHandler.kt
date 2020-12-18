@@ -3,11 +3,11 @@ package com.service.serviceImpl
 import java.util.concurrent.ConcurrentMap
 import java.math.BigDecimal
 import com.model.Transaction
-import java.util.stream.Collectors
+import org.checkerframework.checker.nullness.qual.NonNull
 
 object TransactionCacheHandler {
     @JvmStatic
-    fun getAmountsList(cache: ConcurrentMap<Any?, Any?>): List<BigDecimal> {
+    fun getAmountsList(cache: @NonNull ConcurrentMap<@NonNull Any, @NonNull Any>): List<BigDecimal> {
         return cache.values
             .asSequence()
             .map { Transaction::class.java.cast(it) }
