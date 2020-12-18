@@ -2,16 +2,22 @@ package com.advice;
 
 import com.controller.TransactionController;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.initialization.CacheBuilder;
+import com.initialization.CacheConfigurationHandler;
 import com.model.Transaction;
 
+import com.service.TransactionCache;
+import com.service.serviceImpl.TransactionCacheImpl;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 
+import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.springframework.boot.test.json.JacksonTester;
+import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -32,6 +38,9 @@ public class TransactionValidationAdviceTest {
 
     @InjectMocks
     private TransactionController transactionController;
+
+    @Mock
+    private TransactionCache transactionCache;
 
     private Transaction transaction;
 

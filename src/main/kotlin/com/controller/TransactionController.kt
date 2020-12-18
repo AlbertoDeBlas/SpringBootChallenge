@@ -1,33 +1,25 @@
-package com.controller;
+package com.controller
 
-import com.model.Transaction;
-import com.service.TransactionCache;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import javax.inject.Inject;
+import javax.inject.Inject
+import com.service.TransactionCache
+import org.springframework.http.HttpStatus
+import javax.validation.Valid
+import com.model.Transaction
+import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.*
 
 @RestController
-public class TransactionController {
-
-    private TransactionCache transactionCache;
-
-    @Inject
-    public TransactionController(TransactionCache transactionCache) {
-        this.transactionCache = transactionCache;
-    }
-
+open class TransactionController @Inject constructor(private val transactionCache: TransactionCache) {
     @PostMapping("/transactions")
-    @ResponseStatus( HttpStatus.CREATED )
-    public void newTransaction(@Valid @RequestBody Transaction newTransaction){
-        transactionCache.cachingTransaction(newTransaction);
+    @Validated
+    @ResponseStatus(HttpStatus.CREATED)
+    fun newTransaction(@RequestBody @Valid newTransaction:  Transaction) {
+        transactionCache.cachingTransaction(newTransaction)
     }
 
     @DeleteMapping("/transactions")
-    @ResponseStatus( HttpStatus.NO_CONTENT )
-    void deleteTransactions(){
-        transactionCache.evictAllCacheValues();
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteTransactions() {
+        transactionCache.evictAllCacheValues()
     }
-
 }
