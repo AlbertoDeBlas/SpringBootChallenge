@@ -1,21 +1,17 @@
-package com.service.serviceImpl;
+package com.service.serviceImpl
 
-import com.model.Transaction;
+import java.util.concurrent.ConcurrentMap
+import java.math.BigDecimal
+import com.model.Transaction
+import java.util.stream.Collectors
 
-import java.math.BigDecimal;
-import java.util.*;
-import java.util.concurrent.ConcurrentMap;
-import java.util.stream.Collectors;
-
-public class TransactionCacheHandler {
-
-    public static List<BigDecimal> getAmountsList(ConcurrentMap<Object, Object> cache) {
-        List<BigDecimal> amounts = cache.values()
-                                        .stream()
-                                        .map(Transaction.class::cast)
-                                        .map(Transaction::getAmount)
-                                        .collect(Collectors.toList());
-
-        return amounts;
+object TransactionCacheHandler {
+    @JvmStatic
+    fun getAmountsList(cache: ConcurrentMap<Any?, Any?>): List<BigDecimal> {
+        return cache.values
+            .asSequence()
+            .map { Transaction::class.java.cast(it) }
+            .map { transaction -> transaction.amount }
+            .toList()
     }
 }
