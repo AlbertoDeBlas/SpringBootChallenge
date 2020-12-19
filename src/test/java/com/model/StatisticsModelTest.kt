@@ -1,104 +1,123 @@
-package com.model;
+package com.model
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.controller.StatisticsController;
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.boot.test.json.JacksonTester
+import com.controller.StatisticsController
+import com.service.serviceImpl.TransactionCacheImpl
+import com.service.StatisticsComputation
+import org.mockito.junit.MockitoRule
+import org.mockito.junit.MockitoJUnit
+import org.junit.Before
+import com.fasterxml.jackson.databind.ObjectMapper
+import org.hamcrest.Matcher
+import org.hamcrest.Matchers
+import org.hamcrest.Matchers.any
+import org.junit.Rule
+import org.junit.Test
+import org.mockito.*
+import java.math.BigDecimal
+import org.springframework.test.web.servlet.setup.MockMvcBuilders
+import kotlin.Throws
+import org.springframework.http.MediaType
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers
+import java.lang.Exception
 
-import com.service.StatisticsComputation;
-import com.service.serviceImpl.TransactionCacheImpl;
-import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+class StatisticsModelTest {
+    private val statistics: Statistics? = Statistics(
+        BigDecimal.valueOf(15.43),
+        BigDecimal.valueOf(15.43),
+        BigDecimal.valueOf(15.43),
+        BigDecimal.valueOf(15.43),
+        1L
+    )
 
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
-import org.springframework.boot.test.json.JacksonTester;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import com.model.Statistics;
-import java.math.BigDecimal;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-
-public class StatisticsModelTest {
-
-    private Statistics statistics;
-    private MockMvc mockMvc;
-    private JacksonTester<Statistics> jsonTransaction;
+    private lateinit var jsonTransaction: JacksonTester<Statistics?>
 
     @InjectMocks
-    StatisticsController statisticsController;
+    lateinit var statisticsController: StatisticsController
+
+    lateinit private var mockMvc: MockMvc
 
     @Mock
-    private TransactionCacheImpl transactionCache;
+    private lateinit var transactionCache: TransactionCacheImpl
 
     @Mock
-    private StatisticsComputation statisticsComputation;
+    private lateinit var statisticsComputation: StatisticsComputation
 
     @Rule
-    public MockitoRule rule = MockitoJUnit.rule();
+    @JvmField
+    var rule = MockitoJUnit.rule()
 
     @Before
-    public void setData(){
-        JacksonTester.initFields(this, new ObjectMapper());
-        statistics = new Statistics(BigDecimal.valueOf(15.43),
-                BigDecimal.valueOf(15.43),
-                BigDecimal.valueOf(15.43),
-                BigDecimal.valueOf(15.43),
-                1L);
-        mockMvc = MockMvcBuilders.standaloneSetup(statisticsController).build();
+    fun setData() {
+        JacksonTester.initFields(this, ObjectMapper())
+        mockMvc = MockMvcBuilders.standaloneSetup(statisticsController).build()
     }
 
     @Test
-    public void sumFormatTest() throws Exception{
-        checkFieldFormatString("$.sum","15.43");
+    @Throws(Exception::class)
+    fun sumFormatTest() {
+        checkFieldFormatString("$.sum", "15.43")
     }
 
     @Test
-    public void avgFormatTest() throws Exception{
-        checkFieldFormatString("$.avg","15.43");
+    @Throws(Exception::class)
+    fun avgFormatTest() {
+        checkFieldFormatString("$.avg", "15.43")
     }
 
     @Test
-    public void maxFormatTest() throws Exception{
-        checkFieldFormatString("$.max","15.43");
+    @Throws(Exception::class)
+    fun maxFormatTest() {
+        checkFieldFormatString("$.max", "15.43")
     }
 
     @Test
-    public void minFormatTest() throws Exception{
-        checkFieldFormatString("$.min","15.43");
+    @Throws(Exception::class)
+    fun minFormatTest() {
+        checkFieldFormatString("$.min", "15.43")
     }
 
     @Test
-    public void countFormatTest() throws Exception{
-        checkFieldFormatNumber("$.count",1);
+    @Throws(Exception::class)
+    fun countFormatTest() {
+        checkFieldFormatNumber("$.count", 1)
     }
 
-    private void checkFieldFormatString(String field, String value) throws Exception{
-        checkFieldFormat(field,Matchers.is(value));
+    @Throws(Exception::class)
+    private fun checkFieldFormatString(field: String, value: String) {
+        checkFieldFormat(field, Matchers.`is`(value))
     }
 
-    private void checkFieldFormatNumber(String field, Number value) throws Exception{
-        checkFieldFormat(field,Matchers.is(value));
+    @Throws(Exception::class)
+    private fun checkFieldFormatNumber(field: String, value: Number) {
+        checkFieldFormat(field, Matchers.`is`(value))
     }
 
-    private void checkFieldFormat(String field, Matcher matcher) throws Exception {
-        Mockito.when(statisticsComputation.computeStatistics(any())).thenReturn(statistics);
-        mockMvc.perform(get("/statistics")
+    @Throws(Exception::class)
+    private fun checkFieldFormat(field: String, matcher: Matcher<Any>) {
+        Mockito.`when`(statisticsComputation.computeStatistics(MockitoHelper.anyObject()))
+            .thenReturn(statistics)
+        mockMvc.perform(
+            MockMvcRequestBuilders.get("/statistics")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonTransaction
+                .content(
+                    jsonTransaction
                         .write(statistics)
-                        .getJson()))
-                .andDo(print())
-                .andExpect(MockMvcResultMatchers.jsonPath(field, matcher));
+                        .json
+                )
+        )
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(MockMvcResultMatchers.jsonPath<Any>(field, matcher))
+    }
+    object MockitoHelper {
+        fun <T> anyObject(): T {
+            Mockito.any<T>()
+            return uninitialized()
+        }
+        @Suppress("UNCHECKED_CAST")
+        fun <T> uninitialized(): T =  null as T
     }
 }
