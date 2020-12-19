@@ -1,48 +1,38 @@
-package com.service;
+package com.service
 
-import com.model.Statistics;
-import com.service.serviceImpl.StatisticsComputationImpl;
-import org.junit.Before;
-import org.junit.Test;
+import java.math.BigDecimal
+import com.service.serviceImpl.StatisticsComputationImpl
+import org.junit.Assert
+import org.junit.Test
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
+class StatisticsComputationRoundedUpTest {
+    private var statisticsComputation: StatisticsComputation = StatisticsComputationImpl()
+    private val amountsUpRound: List<BigDecimal> = listOf(
+        BigDecimal.valueOf(15.4353),
+        BigDecimal.valueOf(15.4363),
+        BigDecimal.valueOf(15.4373))
 
-import static org.junit.Assert.assertEquals;
-
-public class StatisticsComputationRoundedUpTest {
-
-    private StatisticsComputation statisticsComputation;
-    private ArrayList<BigDecimal> amountsUpRound;
-
-    @Before
-    public void setData(){
-        amountsUpRound = new ArrayList<>(Arrays.asList(BigDecimal.valueOf(15.4353),BigDecimal.valueOf(15.4363),BigDecimal.valueOf(15.4373)));
-        statisticsComputation = new StatisticsComputationImpl();
+    @Test
+    fun computeSumRoundUp() {
+        val sum = statisticsComputation.computeStatistics(amountsUpRound).sum
+        Assert.assertEquals(BigDecimal.valueOf(46.31), sum)
     }
 
     @Test
-    public void computeSumRoundUp(){
-        Statistics statistics = statisticsComputation.computeStatistics(amountsUpRound);
-        assertEquals(BigDecimal.valueOf(46.31),statistics.getSum());
+    fun computeAverageRoundUp() {
+        val avg = statisticsComputation.computeStatistics(amountsUpRound).avg
+        Assert.assertEquals(BigDecimal.valueOf(15.44), avg)
     }
 
     @Test
-    public void computeAverageRoundUp(){
-        Statistics statistics = statisticsComputation.computeStatistics(amountsUpRound);
-        assertEquals(BigDecimal.valueOf(15.44),statistics.getAvg());
+    fun computeMaxRoundUp() {
+        val max = statisticsComputation.computeStatistics(amountsUpRound).max
+        Assert.assertEquals(BigDecimal.valueOf(15.44), max)
     }
 
     @Test
-    public void computeMaxRoundUp(){
-        Statistics statistics = statisticsComputation.computeStatistics(amountsUpRound);
-        assertEquals(BigDecimal.valueOf(15.44),statistics.getMax());
-    }
-
-    @Test
-    public void computeMinRoundUp(){
-        Statistics statistics = statisticsComputation.computeStatistics(amountsUpRound);
-        assertEquals(BigDecimal.valueOf(15.44),statistics.getMin());
+    fun computeMinRoundUp() {
+        val min = statisticsComputation.computeStatistics(amountsUpRound).min
+        Assert.assertEquals(BigDecimal.valueOf(15.44), min)
     }
 }

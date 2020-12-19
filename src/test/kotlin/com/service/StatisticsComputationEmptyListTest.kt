@@ -1,48 +1,36 @@
-package com.service;
+package com.service
 
-import com.model.Statistics;
-import com.service.serviceImpl.StatisticsComputationImpl;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-
-import static org.junit.Assert.assertEquals;
-
-public class StatisticsComputationEmptyListTest {
-
-    private StatisticsComputation statisticsComputation;
-    private ArrayList<BigDecimal> emptyList;
+import java.math.BigDecimal
+import com.service.serviceImpl.StatisticsComputationImpl
+import org.junit.Assert
+import org.junit.Test
 
 
-    @Before
-    public void setData(){
-        emptyList = new ArrayList<>();
-        statisticsComputation = new StatisticsComputationImpl();
+class StatisticsComputationEmptyListTest {
+    private var statisticsComputation: StatisticsComputation = StatisticsComputationImpl()
+    private var emptyList: List<BigDecimal> = emptyList()
+
+    @Test
+    fun computeSumRoundUp() {
+        val sum = statisticsComputation.computeStatistics(emptyList).sum
+        Assert.assertEquals(BigDecimal.valueOf(0, 2), sum)
     }
 
     @Test
-    public void computeSumRoundUp(){
-        Statistics statistics = statisticsComputation.computeStatistics(emptyList);
-        assertEquals(BigDecimal.valueOf(000,2),statistics.getSum());
+    fun computeAverageRoundUp() {
+        val avg = statisticsComputation.computeStatistics(emptyList).avg
+        Assert.assertEquals(BigDecimal.valueOf(0, 2), avg)
     }
 
     @Test
-    public void computeAverageRoundUp(){
-        Statistics statistics = statisticsComputation.computeStatistics(emptyList);
-        assertEquals(BigDecimal.valueOf(000,2),statistics.getAvg());
+    fun computeMaxRoundUp() {
+        val max = statisticsComputation.computeStatistics(emptyList).max
+        Assert.assertEquals(BigDecimal.valueOf(0, 2), max)
     }
 
     @Test
-    public void computeMaxRoundUp(){
-        Statistics statistics = statisticsComputation.computeStatistics(emptyList);
-        assertEquals(BigDecimal.valueOf(000,2),statistics.getMax());
-    }
-
-    @Test
-    public void computeMinRoundUp(){
-        Statistics statistics = statisticsComputation.computeStatistics(emptyList);
-        assertEquals(BigDecimal.valueOf(000,2),statistics.getMin());
+    fun computeMinRoundUp() {
+        val min = statisticsComputation.computeStatistics(emptyList).min
+        Assert.assertEquals(BigDecimal.valueOf(0, 2), min)
     }
 }

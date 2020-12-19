@@ -1,37 +1,26 @@
-package com.service;
+package com.service
 
-import com.model.Statistics;
-import com.service.serviceImpl.StatisticsComputationImpl;
-import org.junit.Before;
-import org.junit.Test;
+import java.math.BigDecimal
+import com.service.serviceImpl.StatisticsComputationImpl
+import org.junit.Assert
+import org.junit.Test
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
+class StatisticsComputationRoundedUpScaling {
+    private var statisticsComputation: StatisticsComputation = StatisticsComputationImpl()
+    private var amounts: List<BigDecimal> = listOf(
+        BigDecimal.valueOf(5.0),
+        BigDecimal.valueOf(4.0),
+        BigDecimal.valueOf(2.0))
 
-import static org.junit.Assert.assertEquals;
-
-public class StatisticsComputationRoundedUpScaling {
-
-    private StatisticsComputation statisticsComputation;
-    private ArrayList<BigDecimal> amounts;
-
-
-    @Before
-    public void setData() {
-        amounts = new ArrayList<>(Arrays.asList(BigDecimal.valueOf(5.0), BigDecimal.valueOf(4.0), BigDecimal.valueOf(2.0)));
-        statisticsComputation = new StatisticsComputationImpl();
+    @Test
+    fun computeSumRoundUp() {
+        val sum = statisticsComputation.computeStatistics(amounts).sum
+        Assert.assertEquals(BigDecimal.valueOf(1100, 2), sum)
     }
 
     @Test
-    public void computeSumRoundUp(){
-        Statistics statistics = statisticsComputation.computeStatistics(amounts);
-        assertEquals(BigDecimal.valueOf(1100,2),statistics.getSum());
-    }
-
-    @Test
-    public void computeAverageRoundUp(){
-        Statistics statistics = statisticsComputation.computeStatistics(amounts);
-        assertEquals(BigDecimal.valueOf(367,2),statistics.getAvg());
+    fun computeAverageRoundUp() {
+        val avg = statisticsComputation.computeStatistics(amounts).avg
+        Assert.assertEquals(BigDecimal.valueOf(367, 2), avg)
     }
 }
