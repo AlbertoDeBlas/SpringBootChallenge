@@ -44,19 +44,4 @@ class TransactionModelTest {
         val violations = validator.validate(transaction)
         Assertions.assertThat(violations::isNotEmpty)
     }
-
-    @Test
-    fun `Transaction with null amount should add add a violation`() {
-        val instant = Instant.now()
-        val transaction = Transaction(null, Timestamp.from(instant))
-        val violations = validator.validate(transaction)
-        Assertions.assertThat(violations::isNotEmpty)
-    }
-
-    @Test
-    fun `Transaction with null timestamp should add add a violation`() {
-        val transaction = Transaction(BigDecimal.valueOf(1234, 2), null)
-        val violations = validator.validate(transaction)
-        Assertions.assertThat(violations::isNotEmpty)
-    }
 }
