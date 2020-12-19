@@ -1,30 +1,24 @@
-package com.model.annotation;
+package com.model.annotation
 
-import com.exception.OldTransactionException;
+import javax.validation.ConstraintValidator
+import com.model.annotation.XSecondsPastOrPresent
+import java.sql.Timestamp
+import java.util.*
+import javax.validation.ConstraintValidatorContext
+import java.util.concurrent.TimeUnit
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
-import java.sql.Timestamp;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
+class XSecondsPastOrPresentImpl : ConstraintValidator<XSecondsPastOrPresent, Timestamp?> {
+    private var seconds: Int = 60
 
-public class XSecondsPastOrPresentImpl  implements ConstraintValidator<XSecondsPastOrPresent, Timestamp> {
-
-    private Integer seconds;
-
-    @Override
-    public void initialize(XSecondsPastOrPresent constraintAnnotation) {
-        this.seconds = constraintAnnotation.seconds();
+    override fun initialize(constraintAnnotation: XSecondsPastOrPresent) {
+        seconds = constraintAnnotation.seconds
     }
 
-    @Override
-    public boolean isValid(Timestamp timestamp, ConstraintValidatorContext context) {
-        Optional<Timestamp> optionalTimestamp = Optional.ofNullable(timestamp);
+    override fun isValid(timestamp: Timestamp?, context: ConstraintValidatorContext): Boolean {
+        val pastTime = TimeUnit.MILLISECONDS.toNanos(System.currentTimeMillis()) -
+                TimeUnit.MILLISECONDS.toNanos((timestamp ?: Timestamp(0)).time)
+        val differenceInSeconds = TimeUnit.NANOSECONDS.toSeconds(pastTime)
 
-        long pastTime = TimeUnit.MILLISECONDS.toNanos(System.currentTimeMillis()) - TimeUnit.MILLISECONDS.toNanos(optionalTimestamp.orElse(new Timestamp(0)).getTime());
-        long differenceInSeconds = TimeUnit.NANOSECONDS.toSeconds(pastTime);
-
-        return (differenceInSeconds < seconds) ? true : false;
+        return differenceInSeconds < seconds
     }
-
 }
