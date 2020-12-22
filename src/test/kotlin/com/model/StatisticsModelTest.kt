@@ -38,7 +38,7 @@ class StatisticsModelTest {
     @InjectMocks
     lateinit var statisticsController: StatisticsController
 
-    lateinit private var mockMvc: MockMvc
+    private lateinit var mockMvc: MockMvc
 
     @Mock
     private lateinit var transactionCache: TransactionCacheImpl

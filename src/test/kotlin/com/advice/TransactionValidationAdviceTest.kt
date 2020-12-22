@@ -1,82 +1,83 @@
-package com.advice;
+package com.advice
 
-import com.controller.TransactionController;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.initialization.CacheBuilder;
-import com.initialization.CacheConfigurationHandler;
-import com.model.Transaction;
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.boot.test.json.JacksonTester
+import com.model.Transaction
+import org.mockito.InjectMocks
+import com.controller.TransactionController
+import org.mockito.Mock
+import com.service.TransactionCache
+import org.mockito.junit.MockitoRule
+import org.mockito.junit.MockitoJUnit
+import org.junit.Before
+import com.fasterxml.jackson.databind.ObjectMapper
+import org.springframework.test.web.servlet.setup.MockMvcBuilders
+import com.advice.TransactionValidationAdvice
+import org.junit.Rule
+import org.junit.Test
+import org.springframework.http.MediaType
+import java.math.BigDecimal
+import java.time.Instant
+import kotlin.Throws
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers
+import java.lang.Exception
+import java.sql.Timestamp
 
-import com.service.TransactionCache;
-import com.service.serviceImpl.TransactionCacheImpl;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.mockito.InjectMocks;
-
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
-import org.springframework.boot.test.json.JacksonTester;
-import org.springframework.cache.caffeine.CaffeineCacheManager;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.time.Instant;
-
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-public class TransactionValidationAdviceTest {
-
-    private MockMvc mockMvc;
-    private JacksonTester<Transaction> jsonTransaction;
+class TransactionValidationAdviceTest {
+    private lateinit var mockMvc: MockMvc
+    private lateinit var jsonTransaction: JacksonTester<Transaction?>
 
     @InjectMocks
-    private TransactionController transactionController;
+    private lateinit var transactionController: TransactionController
 
     @Mock
-    private TransactionCache transactionCache;
-
-    private Transaction transaction;
+    private lateinit var transactionCache: TransactionCache
+    private lateinit var transaction: Transaction
 
     @Rule
-    public MockitoRule rule = MockitoJUnit.rule();
-
+    @JvmField
+    var rule = MockitoJUnit.rule()
     @Before
-    public void setData(){
-        JacksonTester.initFields(this, new ObjectMapper());
+    fun setData() {
+        JacksonTester.initFields(this, ObjectMapper())
         mockMvc = MockMvcBuilders.standaloneSetup(transactionController)
-                .setControllerAdvice(new TransactionValidationAdvice())
-                .build();
-        transaction = new Transaction(BigDecimal.valueOf(1234,2), Timestamp.from(Instant.now().plusMillis(-61000)));
+            .setControllerAdvice(TransactionValidationAdvice())
+            .build()
+        transaction = Transaction(BigDecimal.valueOf(1234, 2), Timestamp.from(Instant.now().plusMillis(-61000)))
     }
 
     @Test
-    public void checkStatusCodeNoContentIsReturnedForOldTransaction() throws Exception{
-        mockMvc.perform(post("/transactions")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(jsonTransaction
-                            .write(transaction)
-                            .getJson()))
-                .andDo(print())
-                .andExpect(status().isNoContent());
-    }
-
-    @Test
-    public void checkStatusCodeUnprocessableEntityIsReturnedForFutureTransaction() throws Exception{
-        transaction = new Transaction(BigDecimal.valueOf(1234,2), Timestamp.from(Instant.now().plusMillis(+1000)));
-
-        mockMvc.perform(post("/transactions")
+    @Throws(Exception::class)
+    fun checkStatusCodeNoContentIsReturnedForOldTransaction() {
+        mockMvc.perform(
+            MockMvcRequestBuilders.post("/transactions")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonTransaction
+                .content(
+                    jsonTransaction
                         .write(transaction)
-                        .getJson()))
-                .andDo(print())
-                .andExpect(status().isUnprocessableEntity());
+                        .json
+                )
+        )
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(MockMvcResultMatchers.status().isNoContent)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun checkStatusCodeUnprocessableEntityIsReturnedForFutureTransaction() {
+        transaction = Transaction(BigDecimal.valueOf(1234, 2), Timestamp.from(Instant.now().plusMillis(+1000)))
+        mockMvc.perform(
+            MockMvcRequestBuilders.post("/transactions")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    jsonTransaction
+                        .write(transaction)
+                        .json
+                )
+        )
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(MockMvcResultMatchers.status().isUnprocessableEntity)
     }
 }
