@@ -1,65 +1,59 @@
-package com.service;
+package com.service
 
-import com.github.benmanes.caffeine.cache.Caffeine;
-import com.github.benmanes.caffeine.cache.LoadingCache;
-import com.github.benmanes.caffeine.cache.Ticker;
-import com.initialization.CacheConfigurationHandler;
-import com.model.Transaction;
-import org.junit.Before;
-import org.junit.Test;
+import com.github.benmanes.caffeine.cache.CacheLoader
+import com.github.benmanes.caffeine.cache.Caffeine
+import com.github.benmanes.caffeine.cache.LoadingCache
+import com.github.benmanes.caffeine.cache.Ticker
+import com.initialization.CacheConfigurationHandler.transactionCaffeineConfig
+import com.model.Transaction
+import org.junit.Before
+import java.math.BigDecimal
+import java.time.Instant
+import com.initialization.CacheConfigurationHandler
+import org.junit.Assert
+import org.junit.Test
+import java.sql.Timestamp
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicLong
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicLong;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
-public class CacheExpirationTest {
-
-    private Caffeine caffeine;
-    private Transaction transaction;
-
+class CacheExpirationTest {
+    private lateinit var caffeine: Caffeine<Any, Any>
+    private lateinit var transaction: Transaction
     @Before
-    public void setData(){
-        transaction = new Transaction(BigDecimal.valueOf(1234,2), Timestamp.from(Instant.now()));
-        caffeine = CacheConfigurationHandler.getTransactionCaffeineConfig();
+    fun setData() {
+        transaction = Transaction(BigDecimal.valueOf(1234, 2), Timestamp.from(Instant.now()))
+        caffeine = transactionCaffeineConfig
     }
 
     @Test
-    public void cacheExpiration(){
-        FakeTicker fakeTicker = new FakeTicker();
-        LoadingCache<String, Transaction> cache = caffeine.ticker(fakeTicker).build(k -> transaction);
-        cache.get("test");
-        fakeTicker.advance(61, TimeUnit.SECONDS);
-
-        assertNull(cache.getIfPresent("test"));
+    fun `after 61 seconds cached value has expired and cache returns nothing`() {
+        val fakeTicker = FakeTicker()
+        val cache: LoadingCache<String, Transaction> = caffeine.ticker(fakeTicker).build(
+            CacheLoader { transaction })
+        cache["test"]
+        fakeTicker.advance(61, TimeUnit.SECONDS)
+        Assert.assertNull(cache.getIfPresent("test"))
     }
 
     @Test
-    public void cacheNotExpired(){
-        FakeTicker fakeTicker = new FakeTicker();
-        LoadingCache<String, Transaction> cache = caffeine.ticker(fakeTicker).build(k -> transaction);
-        cache.get("test");
-        fakeTicker.advance(59, TimeUnit.SECONDS);
-
-        assertNotNull(cache.getIfPresent("test"));
+    fun `after 59 seconds cached value is still in cache and is returned`() {
+        val fakeTicker = FakeTicker()
+        val cache: LoadingCache<String, Transaction> = caffeine.ticker(fakeTicker).build(
+            CacheLoader { transaction })
+        cache["test"]
+        fakeTicker.advance(59, TimeUnit.SECONDS)
+        Assert.assertNotNull(cache.getIfPresent("test"))
     }
 }
 
-class FakeTicker implements Ticker {
-
-    private final AtomicLong nanos = new AtomicLong();
-
-    public FakeTicker advance(long time, TimeUnit timeUnit) {
-        nanos.addAndGet(timeUnit.toNanos(time));
-        return this;
+internal class FakeTicker : Ticker {
+    private val nanos = AtomicLong()
+    fun advance(time: Long, timeUnit: TimeUnit): FakeTicker {
+        nanos.addAndGet(timeUnit.toNanos(time))
+        return this
     }
 
-    @Override
-    public long read() {
-        return nanos.getAndAdd(0);
+    override fun read(): Long {
+        return nanos.getAndAdd(0)
     }
 }
