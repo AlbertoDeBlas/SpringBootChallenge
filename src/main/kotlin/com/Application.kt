@@ -1,7 +1,6 @@
 package com
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import kotlin.jvm.JvmStatic
 import org.springframework.boot.SpringApplication
 
 @SpringBootApplication

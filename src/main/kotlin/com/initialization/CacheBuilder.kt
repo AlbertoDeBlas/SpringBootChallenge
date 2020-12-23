@@ -11,8 +11,6 @@ import org.springframework.context.annotation.Configuration
 @EnableCaching
 open class CacheBuilder {
 
-
-
     @Bean
     open fun caffeineConfig(): Caffeine<Any, Any> {
         return CacheConfigurationHandler.transactionCaffeineConfig

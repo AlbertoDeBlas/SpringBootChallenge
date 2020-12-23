@@ -12,7 +12,7 @@ class NotParsableFieldsAdvice {
     @ResponseBody
     @ExceptionHandler(InvalidFormatException::class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    fun NotParsableFieldsHandler(ex: InvalidFormatException): String {
+    fun notParsableFieldsHandler(ex: InvalidFormatException): String {
         return ex.message ?: "Not parsable Fields"
     }
 }

@@ -1,7 +1,6 @@
 package com.model
 
 import com.fasterxml.jackson.annotation.JsonFormat
-import lombok.Builder
 import lombok.Data
 import java.math.BigDecimal
 

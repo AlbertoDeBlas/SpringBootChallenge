@@ -1,9 +1,7 @@
 package com.model.annotation
 
 import javax.validation.ConstraintValidator
-import com.model.annotation.XSecondsPastOrPresent
 import java.sql.Timestamp
-import java.util.*
 import javax.validation.ConstraintValidatorContext
 import java.util.concurrent.TimeUnit
 

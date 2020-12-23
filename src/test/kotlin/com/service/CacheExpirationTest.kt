@@ -28,8 +28,7 @@ class CacheExpirationTest {
     @Test
     fun `after 61 seconds cached value has expired and cache returns nothing`() {
         val fakeTicker = FakeTicker()
-        val cache: LoadingCache<String, Transaction> = caffeine.ticker(fakeTicker).build(
-            CacheLoader { transaction })
+        val cache: LoadingCache<String, Transaction> = caffeine.ticker(fakeTicker).build { transaction }
         cache["test"]
         fakeTicker.advance(61, TimeUnit.SECONDS)
         Assert.assertNull(cache.getIfPresent("test"))
@@ -38,8 +37,7 @@ class CacheExpirationTest {
     @Test
     fun `after 59 seconds cached value is still in cache and is returned`() {
         val fakeTicker = FakeTicker()
-        val cache: LoadingCache<String, Transaction> = caffeine.ticker(fakeTicker).build(
-            CacheLoader { transaction })
+        val cache: LoadingCache<String, Transaction> = caffeine.ticker(fakeTicker).build { transaction }
         cache["test"]
         fakeTicker.advance(59, TimeUnit.SECONDS)
         Assert.assertNotNull(cache.getIfPresent("test"))
