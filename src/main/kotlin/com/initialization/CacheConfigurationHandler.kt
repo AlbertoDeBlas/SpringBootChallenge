@@ -1,39 +1,32 @@
-package com.initialization;
+package com.initialization
 
-import com.github.benmanes.caffeine.cache.Caffeine;
-import com.github.benmanes.caffeine.cache.Expiry;
-import com.model.Transaction;
-import org.checkerframework.checker.index.qual.NonNegative;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import com.github.benmanes.caffeine.cache.Caffeine
+import com.model.Transaction
+import com.github.benmanes.caffeine.cache.Expiry
+import org.checkerframework.checker.index.qual.NonNegative
+import java.util.concurrent.TimeUnit
 
-import java.util.concurrent.TimeUnit;
-
-public class CacheConfigurationHandler {
-
-    public static Caffeine<Object, Transaction> getTransactionCaffeineConfig() {
-        return Caffeine.newBuilder().expireAfter(new Expiry<>() {
-
-            @Override
-            public long expireAfterCreate(@NonNull Object o, @NonNull Transaction transaction, long l) {
-                return computeExpiration(transaction);
+object CacheConfigurationHandler {
+    @JvmStatic
+    val transactionCaffeineConfig: Caffeine<Any, Any>
+        get() = Caffeine.newBuilder().expireAfter(object : Expiry<Any, Any> {
+            override fun expireAfterCreate(o: Any, transaction: Any, l: Long): Long {
+                return computeExpiration(transaction)
             }
 
-            @Override
-            public long expireAfterUpdate(@NonNull Object o, @NonNull Transaction transaction, long l, @NonNegative long l1) {
-                return computeExpiration(transaction);
+            override fun expireAfterUpdate(o: Any, transaction: Any, l: Long, l1: @NonNegative Long): Long {
+                return computeExpiration(transaction)
             }
 
-            @Override
-            public long expireAfterRead(@NonNull Object o, @NonNull Transaction transaction, long l, @NonNegative long l1) {
-                return computeExpiration(transaction);
+            override fun expireAfterRead(o: Any, transaction: Any, l: Long, l1: @NonNegative Long): Long {
+                return computeExpiration(transaction)
             }
 
-            private long computeExpiration(@NonNull Transaction transaction) {
-                long differenceBetweenCurrentAndTransaction =
-                        TimeUnit.MILLISECONDS.toNanos(System.currentTimeMillis()) -
-                                TimeUnit.MILLISECONDS.toNanos(transaction.getTimestamp().getTime());
-                return TimeUnit.SECONDS.toNanos(60) - differenceBetweenCurrentAndTransaction;
+            private fun computeExpiration(transaction: Any): Long {
+                transaction as Transaction
+                val differenceBetweenCurrentAndTransaction = TimeUnit.MILLISECONDS.toNanos(System.currentTimeMillis()) -
+                        TimeUnit.MILLISECONDS.toNanos(transaction.timestamp.time)
+                return TimeUnit.SECONDS.toNanos(60) - differenceBetweenCurrentAndTransaction
             }
-        });
-    }
+        })
 }

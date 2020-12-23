@@ -1,27 +1,28 @@
-package com.initialization;
+package com.initialization
 
-import com.github.benmanes.caffeine.cache.Caffeine;
-
-import com.model.Transaction;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.caffeine.CaffeineCacheManager;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import com.github.benmanes.caffeine.cache.Caffeine
+import org.springframework.cache.CacheManager
+import org.springframework.cache.annotation.EnableCaching
+import org.springframework.cache.caffeine.CaffeineCacheManager
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 
 @Configuration
 @EnableCaching
-public class CacheBuilder {
+open class CacheBuilder {
+
+
 
     @Bean
-    public Caffeine<Object, Transaction> caffeineConfig() {
-        return CacheConfigurationHandler.getTransactionCaffeineConfig();
+    open fun caffeineConfig(): Caffeine<Any, Any> {
+        return CacheConfigurationHandler.transactionCaffeineConfig
+
     }
 
     @Bean
-    public CacheManager cacheManager(Caffeine caffeine) {
-        CaffeineCacheManager caffeineCacheManager = new CaffeineCacheManager("TransactionCache");
-        caffeineCacheManager.setCaffeine(caffeine);
-        return caffeineCacheManager;
+    open fun cacheManager(caffeine: Caffeine<Any, Any>): CacheManager {
+        val caffeineCacheManager = CaffeineCacheManager("TransactionCache")
+        caffeineCacheManager.setCaffeine(caffeine)
+        return caffeineCacheManager
     }
 }
