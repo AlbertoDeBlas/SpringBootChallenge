@@ -5,16 +5,15 @@ import org.springframework.boot.test.json.JacksonTester
 import com.controller.StatisticsController
 import com.service.serviceImpl.TransactionCacheImpl
 import com.service.StatisticsComputation
-import org.mockito.junit.MockitoRule
 import org.mockito.junit.MockitoJUnit
 import org.junit.Before
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
-import org.hamcrest.Matchers.any
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.*
+import org.mockito.junit.MockitoRule
 import java.math.BigDecimal
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import kotlin.Throws
@@ -25,7 +24,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import java.lang.Exception
 
 class StatisticsModelTest {
-    private val statistics: Statistics? = Statistics(
+    private val statistics: Statistics = Statistics(
         BigDecimal.valueOf(15.43),
         BigDecimal.valueOf(15.43),
         BigDecimal.valueOf(15.43),
@@ -48,7 +47,7 @@ class StatisticsModelTest {
 
     @Rule
     @JvmField
-    var rule = MockitoJUnit.rule()
+    var rule: MockitoRule = MockitoJUnit.rule()
 
     @Before
     fun setData() {
@@ -110,7 +109,7 @@ class StatisticsModelTest {
                 )
         )
             .andDo(MockMvcResultHandlers.print())
-            .andExpect(MockMvcResultMatchers.jsonPath<Any>(field, matcher))
+            .andExpect(MockMvcResultMatchers.jsonPath(field, matcher))
     }
     object MockitoHelper {
         fun <T> anyObject(): T {

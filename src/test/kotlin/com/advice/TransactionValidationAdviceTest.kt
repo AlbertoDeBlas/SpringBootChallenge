@@ -1,29 +1,26 @@
 package com.advice
 
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.boot.test.json.JacksonTester
-import com.model.Transaction
-import org.mockito.InjectMocks
 import com.controller.TransactionController
-import org.mockito.Mock
-import com.service.TransactionCache
-import org.mockito.junit.MockitoRule
-import org.mockito.junit.MockitoJUnit
-import org.junit.Before
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.springframework.test.web.servlet.setup.MockMvcBuilders
-import com.advice.TransactionValidationAdvice
+import com.model.Transaction
+import com.service.TransactionCache
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.InjectMocks
+import org.mockito.Mock
+import org.mockito.junit.MockitoJUnit
+import org.mockito.junit.MockitoRule
+import org.springframework.boot.test.json.JacksonTester
 import org.springframework.http.MediaType
-import java.math.BigDecimal
-import java.time.Instant
-import kotlin.Throws
+import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
-import java.lang.Exception
+import org.springframework.test.web.servlet.setup.MockMvcBuilders
+import java.math.BigDecimal
 import java.sql.Timestamp
+import java.time.Instant
 
 class TransactionValidationAdviceTest {
     private lateinit var mockMvc: MockMvc
@@ -38,7 +35,7 @@ class TransactionValidationAdviceTest {
 
     @Rule
     @JvmField
-    var rule = MockitoJUnit.rule()
+    var rule: MockitoRule = MockitoJUnit.rule()
     @Before
     fun setData() {
         JacksonTester.initFields(this, ObjectMapper())

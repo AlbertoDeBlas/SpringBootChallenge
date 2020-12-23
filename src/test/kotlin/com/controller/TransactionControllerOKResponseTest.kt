@@ -4,7 +4,6 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.boot.test.json.JacksonTester
 import com.model.Transaction
 import org.mockito.InjectMocks
-import com.controller.TransactionController
 import org.mockito.Mock
 import com.service.TransactionCache
 import org.mockito.junit.MockitoRule
@@ -38,7 +37,7 @@ class TransactionControllerOKResponseTest {
 
     @Rule
     @JvmField
-    var rule = MockitoJUnit.rule()
+    var rule: MockitoRule = MockitoJUnit.rule()
     @Before
     fun setData() {
         JacksonTester.initFields(this, ObjectMapper())

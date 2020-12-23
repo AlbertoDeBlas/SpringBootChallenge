@@ -1,18 +1,16 @@
 package com.service
 
-import com.github.benmanes.caffeine.cache.CacheLoader
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.github.benmanes.caffeine.cache.LoadingCache
 import com.github.benmanes.caffeine.cache.Ticker
 import com.initialization.CacheConfigurationHandler.transactionCaffeineConfig
 import com.model.Transaction
-import org.junit.Before
-import java.math.BigDecimal
-import java.time.Instant
-import com.initialization.CacheConfigurationHandler
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
+import java.math.BigDecimal
 import java.sql.Timestamp
+import java.time.Instant
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicLong
 

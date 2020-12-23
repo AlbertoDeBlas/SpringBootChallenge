@@ -1,13 +1,11 @@
 package com.model
 
-import com.model.Transaction
 import org.assertj.core.api.Assertions
-
 import org.junit.Test
 import org.junit.jupiter.api.TestInstance
-import java.time.Instant
 import java.math.BigDecimal
 import java.sql.Timestamp
+import java.time.Instant
 import javax.validation.Validation
 import javax.validation.Validator
 

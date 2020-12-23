@@ -14,6 +14,7 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.junit.MockitoJUnit
+import org.mockito.junit.MockitoRule
 import org.springframework.cache.CacheManager
 import org.springframework.cache.caffeine.CaffeineCache
 import java.math.BigDecimal
@@ -24,7 +25,7 @@ import java.util.*
 class TransactionCacheTest {
     @Rule
     @JvmField
-    var initRule = MockitoJUnit.rule()
+    var initRule: MockitoRule = MockitoJUnit.rule()
 
     @Mock
     private lateinit var cacheManager: CacheManager
