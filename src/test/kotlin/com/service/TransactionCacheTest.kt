@@ -1,108 +1,92 @@
-package com.service;
+package com.service
 
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.Cache
+import com.github.benmanes.caffeine.cache.Caffeine
+import com.initialization.CacheConfigurationHandler.transactionCaffeineConfig
+import com.model.Transaction
+import com.service.serviceImpl.TransactionCacheImpl
+import org.hamcrest.MatcherAssert
+import org.hamcrest.Matchers
+import org.hamcrest.core.Is
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+import org.mockito.Mock
+import org.mockito.Mockito
+import org.mockito.junit.MockitoJUnit
+import org.springframework.cache.CacheManager
+import org.springframework.cache.caffeine.CaffeineCache
+import java.math.BigDecimal
+import java.sql.Timestamp
+import java.time.Instant
+import java.util.*
 
-
-import com.initialization.CacheConfigurationHandler;
-import com.model.Transaction;
-import com.service.serviceImpl.TransactionCacheImpl;
-
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.caffeine.CaffeineCache;
-
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.hamcrest.core.Is.is;
-
-public class TransactionCacheTest {
-
+class TransactionCacheTest {
     @Rule
-    public MockitoRule initRule = MockitoJUnit.rule();
+    @JvmField
+    var initRule = MockitoJUnit.rule()
 
     @Mock
-    private CacheManager cacheManager;
-
-    private Transaction transaction;
-    private Transaction anotherTransaction;
-    private Caffeine caffeine;
-    private Cache cache;
-    private CaffeineCache caffeineCache;
-    private TransactionCache transactionCache;
-
+    private lateinit var cacheManager: CacheManager
+    private lateinit var transaction: Transaction
+    private lateinit var anotherTransaction: Transaction
+    private lateinit var caffeine: Caffeine<Any, Any>
+    private lateinit var cache: Cache<Any, Any>
+    private lateinit var caffeineCache: CaffeineCache
+    private lateinit var transactionCache: TransactionCache
     @Before
-    public void setData(){
-        transaction = new Transaction(BigDecimal.valueOf(1234,2), Timestamp.from(Instant.now()));
-        anotherTransaction = new Transaction(BigDecimal.valueOf(1334,2), Timestamp.from(Instant.now()));
-        caffeine = CacheConfigurationHandler.getTransactionCaffeineConfig();
-        cache = caffeine.build();
-        caffeineCache = new CaffeineCache("transactionCache", cache);
-        transactionCache = new TransactionCacheImpl(cacheManager);
+    fun setData() {
+        transaction = Transaction(BigDecimal.valueOf(1234, 2), Timestamp.from(Instant.now()))
+        anotherTransaction = Transaction(BigDecimal.valueOf(1334, 2), Timestamp.from(Instant.now()))
+        caffeine = transactionCaffeineConfig
+        cache = caffeine.build()
+        caffeineCache = CaffeineCache("transactionCache", cache)
+        transactionCache = TransactionCacheImpl(cacheManager)
     }
 
     @Test
-    public void transactionCaching(){
-        Transaction firstTransaction = transactionCache.cachingTransaction(transaction);
-        Transaction secondTransaction = transactionCache.cachingTransaction(transaction);
-
-        assertThat(firstTransaction, equalTo(secondTransaction));
+    fun `same transaction cached two times has to be the same`() {
+        val firstTransaction = transactionCache.cachingTransaction(transaction)
+        val secondTransaction = transactionCache.cachingTransaction(transaction)
+        MatcherAssert.assertThat(firstTransaction, Matchers.equalTo(secondTransaction))
     }
 
     @Test
-    public void transactionCachingDifferentTrans(){
-        Transaction firstTransaction = transactionCache.cachingTransaction(transaction);
-        Transaction secondTransaction = transactionCache.cachingTransaction(anotherTransaction);
-
-        assertThat(firstTransaction, not(secondTransaction));
+    fun `two different cached transactions have to retrieve different values`() {
+        val firstTransaction = transactionCache.cachingTransaction(transaction)
+        val secondTransaction = transactionCache.cachingTransaction(anotherTransaction)
+        MatcherAssert.assertThat(firstTransaction, Matchers.not(secondTransaction))
     }
 
     @Test
-    public void getSingleCacheValues(){
-        caffeineCache.put("first",transaction);
-        Mockito.when(cacheManager.getCache(Mockito.anyString()))
-                .thenReturn(caffeineCache);
-        List<BigDecimal> cachedValues = transactionCache.getCacheValues();
-        ArrayList<BigDecimal> expectedValues = new ArrayList<>();
-        expectedValues.add(BigDecimal.valueOf(1234,2));
-
-        assertThat(expectedValues, equalTo(new ArrayList<>(cachedValues)));
-    }
-
-    @Test
-    public void getMultipleCacheValues(){
-        caffeineCache.put("first",transaction);
-        caffeineCache.put("second",anotherTransaction);
-        Mockito.when(cacheManager.getCache(Mockito.anyString()))
-                .thenReturn(caffeineCache);
-        List<BigDecimal> cachedValues = transactionCache.getCacheValues();
-        ArrayList<BigDecimal> expectedValues = new ArrayList<>();
-        expectedValues.add(BigDecimal.valueOf(1334,2));
-        expectedValues.add(BigDecimal.valueOf(1234,2));
-
-        assertThat(expectedValues, equalTo(new ArrayList<>(cachedValues)));
-    }
+    fun `for one value cache has to retrieve same value as cached object`(){
+            caffeineCache.put("first", transaction)
+            Mockito.`when`(cacheManager.getCache(Mockito.anyString()))
+                .thenReturn(caffeineCache)
+            val cachedValues = transactionCache.getCacheValues()
+            val expectedValues = ArrayList<BigDecimal>()
+            expectedValues.add(BigDecimal.valueOf(1234, 2))
+            MatcherAssert.assertThat(expectedValues, Matchers.equalTo(ArrayList(cachedValues)))
+        }
 
     @Test
-    public void getEmptyCacheValues(){
-        Mockito.when(cacheManager.getCache(Mockito.anyString()))
-                .thenReturn(caffeineCache);
-        List<BigDecimal> cachedValues = transactionCache.getCacheValues();
+    fun `for multiple values cache has to retrieve same values as cached objects`(){
+            caffeineCache.put("first", transaction)
+            caffeineCache.put("second", anotherTransaction)
+            Mockito.`when`(cacheManager.getCache(Mockito.anyString()))
+                .thenReturn(caffeineCache)
+            val cachedValues = transactionCache.getCacheValues()
+            val expectedValues = ArrayList<BigDecimal>()
+            expectedValues.add(BigDecimal.valueOf(1334, 2))
+            expectedValues.add(BigDecimal.valueOf(1234, 2))
+            MatcherAssert.assertThat(expectedValues, Matchers.equalTo(ArrayList(cachedValues)))
+        }
 
-        assertThat(cachedValues,is(empty()));
-    }
+    @Test
+    fun `if there are no values cache has to retrieve an empty list`() {
+            Mockito.`when`(cacheManager.getCache(Mockito.anyString()))
+                .thenReturn(caffeineCache)
+            val cachedValues = transactionCache.getCacheValues()
+            MatcherAssert.assertThat(cachedValues, Is.`is`(Matchers.empty()))
+        }
 }
-
-
