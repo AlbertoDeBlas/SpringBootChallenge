@@ -7,7 +7,9 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
 import java.util.stream.Collectors
+import mu.KotlinLogging
 
+private val logger = KotlinLogging.logger {}
 @Service
 class StatisticsComputationImpl : StatisticsComputation {
     override fun computeStatistics(amounts: List<BigDecimal>): Statistics {
@@ -17,11 +19,16 @@ class StatisticsComputationImpl : StatisticsComputation {
     }
 
     private fun mapStatistics(summaryStatistics: DoubleSummaryStatistics): Statistics {
+        logger.debug { "mapStatistics parameters: summaryStatistics: $summaryStatistics" }
+
         val sum = toScaledRoundedBigDecimal(summaryStatistics.sum)
         val avg = toScaledRoundedBigDecimal(summaryStatistics.average)
         val max = getFiniteValue(summaryStatistics.max)
         val min = getFiniteValue(summaryStatistics.min)
         val count = summaryStatistics.count
+
+        logger.debug { "mapStatistics return: sum: $sum, avg: $avg, max: $max, min: $min, count: $count" }
+
         return Statistics(sum, avg, max, min, count)
     }
 
