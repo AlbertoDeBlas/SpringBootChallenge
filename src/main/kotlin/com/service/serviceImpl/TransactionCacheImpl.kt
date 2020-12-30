@@ -13,7 +13,7 @@ import org.springframework.cache.annotation.CacheEvict
 import org.springframework.stereotype.Service
 
 @Service
-open class TransactionCacheImpl @Inject constructor(private val cacheManager: CacheManager) : TransactionCache {
+class TransactionCacheImpl @Inject constructor(private val cacheManager: CacheManager) : TransactionCache {
     @Cacheable("TransactionCache")
     override fun cachingTransaction(transaction: Transaction): Transaction {
         return transaction

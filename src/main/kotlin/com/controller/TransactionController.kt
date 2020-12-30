@@ -9,7 +9,7 @@ import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
 @RestController
-open class TransactionController @Inject constructor(private val transactionCache: TransactionCache) {
+class TransactionController @Inject constructor(private val transactionCache: TransactionCache) {
     @PostMapping("/transactions")
     @Validated
     @ResponseStatus(HttpStatus.CREATED)
