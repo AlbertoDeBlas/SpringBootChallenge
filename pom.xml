@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.n26</groupId>
+    <groupId>com</groupId>
     <artifactId>coding-challenge</artifactId>
     <version>1.0.3</version>
 
@@ -19,7 +19,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.7.RELEASE</version>
+        <version>2.4.1</version>
     </parent>
 
 
@@ -196,11 +196,26 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <executions>
                     <execution>
+                        <phase>package</phase>
                         <goals>
                             <goal>build-image</goal>
                         </goals>
                     </execution>
                 </executions>
+                <!--<configuration>
+                    <image>
+                        <name>docker.example.com/library/${project.artifactId}</name>
+                        <publish>true</publish>
+                    </image>
+                    <docker>
+                        <publishRegistry>
+                            <username>user</username>
+                            <password>secret</password>
+                            <url>https://docker.example.com/v1/</url>
+                            <email>user@example.com</email>
+                        </publishRegistry>
+                    </docker>
+                </configuration> -->
             </plugin>
         </plugins>
     </build>
@@ -210,7 +225,7 @@
             <uniqueVersion>false</uniqueVersion>
             <id>CodingChallenge</id>
             <name>Coding Challenge</name>
-            <url>file:///home/al/git/N26 Backend Engineer Coding Challenge</url>
+            <url>file:///home/al/git/Coding Challenge</url>
             <layout>default</layout>
         </repository>
     </distributionManagement>
@@ -313,6 +328,12 @@
             <artifactId>hibernate-validator</artifactId>
             <version>6.0.0.Final</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>3.0.0-M5</version>
+        </dependency>
+
     </dependencies>
 
 </project>
